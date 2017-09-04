@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["es6"],
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "ES2016",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "typeRoots": [ "node_modules/@types" ]
+  },
+  "exclude": [
+    "node_modules",
+    "demoData"
+  ]
+}

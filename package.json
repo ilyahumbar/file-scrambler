@@ -1,0 +1,25 @@
+{
+  "name": "file-scrambler",
+  "version": "0.0.1",
+  "description": "TODO",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run process:all",
+    "process:all": "ts-node --cache-directory .tscache ./index.ts demoData/text-small.txt demoData/text-mid.txt demoData/text-large.txt"
+  },
+  "author": {
+    "name": "Ilya Humbar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilyahumbar/file-scrambler.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@types/command-line-args": "^4.0.1",
+    "@types/node": "^8.0.26",
+    "command-line-args": "^4.0.7",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
+  }
+}
