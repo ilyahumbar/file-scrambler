@@ -1,3 +1,5 @@
+const regexUtils = require('../utils/regex');
+
 /**
  * String processing callback
  *
@@ -9,15 +11,14 @@
 /***/
 function scrambleSingle(line, process) {
   let currentIndex = 0;
-  let re = /".*?"/g;
   let result = '';
 
-  let match;
-  while (match = re.exec(line)) {
+  const matches = regexUtils.matchAll(line, /".*?"/g);
+  matches.forEach((match) => {
     result += line.substr(currentIndex, match.index - currentIndex);
     result += process(match[0]);
     currentIndex = match.index + match[0].length;
-  }
+  });
 
   result += line.substr(currentIndex);
 

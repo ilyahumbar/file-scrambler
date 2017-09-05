@@ -27,11 +27,12 @@ const stat = promisify(fs.stat);
  */
 function scramble (filePath, outputDir, scrambleMulti) {
   return stat(outputDir)
-    .catch((e) => mkdir(outputDir))
+    .catch(() => mkdir(outputDir))
     .then(() => processFileAndWriteResults(filePath, outputDir, scrambleMulti));
 }
 
 function processFileAndWriteResults (filePath, outputDir, scrambleMulti) {
+  // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     const outputFilePath = path.join(outputDir, path.basename(filePath));
     const fileReader = new FileReader();
@@ -53,8 +54,8 @@ function processFileAndWriteResults (filePath, outputDir, scrambleMulti) {
       scrambleMulti(lines).forEach((l) => {
         outputFileStream.write(l);
         outputFileStream.write(os.EOL);
-      })
-    })
+      });
+    });
   });
 }
 

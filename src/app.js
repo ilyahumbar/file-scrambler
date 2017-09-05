@@ -10,30 +10,31 @@ const appArgs = commandLineArgs([
 
 exports.start = ()=> {
   if (appArgs.src === null || appArgs.src === undefined) {
-    console.warn('No files specified.')
+    console.warn('No files specified.');
     return;
   }
 
   cluster.isMaster ? initMaster() : initWorker();
-}
+};
 
 function initMaster() {
   for (let i = 0; i < appArgs.src.length; i++) {
     const worker = cluster.fork();
 
-    worker.on('message', (msg) => {
+    worker.once('message', (msg) => {
       if (msg.isSuccess) {
         console.log(`Successfully processed file ${msg.filePath} into ${msg.outputPath}`);
       } else {
         console.error(`Error while processing file ${msg.filePath}`);
         console.error(msg.error);
       }
+      worker.kill();
     });
 
-    worker.on('online', () => {
+    worker.once('online', () => {
       const message = {
         filePath: appArgs.src[i],
-        outputDir: appArgs.outputDir
+        outputDir: appArgs.outputDir,
       };
 
       worker.send(message);
@@ -43,7 +44,7 @@ function initMaster() {
 
 function initWorker() {
   // Receive messages from the master process.
-  process.on('message', (msg) => {
+  process.once('message', (msg) => {
     processSingleFile(msg.filePath, msg.outputDir);
   });
 }
@@ -54,19 +55,18 @@ function processSingleFile(filePath, outputDir) {
       const message = {
         filePath: filePath,
         outputPath: r,
-        isSuccess: true
+        isSuccess: true,
       };
       process.send(message);
+      return message;
     })
     .catch((e) => {
       const message = {
         error: e,
         filePath: filePath,
-        isSuccess: false
+        isSuccess: false,
       };
       process.send(message);
-    })
-    .then(() => {
-      process.exit();
+      return message;
     });
 }

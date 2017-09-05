@@ -40,7 +40,7 @@ class FileReader {
         flushBuffer();
       }
       processLinesCallback(null, null);
-    })
+    });
   }
 }
 
